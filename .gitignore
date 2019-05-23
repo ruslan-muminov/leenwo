@@ -1,0 +1,7 @@
+.erlang.mk
+_rel
+deps
+ebin/*.beam
+logs
+relx
+leenwo.d
