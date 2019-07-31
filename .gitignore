@@ -5,3 +5,5 @@ ebin/*.beam
 logs
 relx
 leenwo.d
+erl_crash.dump
+ssl
