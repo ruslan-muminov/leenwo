@@ -1,9 +1,0 @@
-{application, 'leenwo', [
-	{description, "Web server for telegram bot for learning english words"},
-	{vsn, "0.1.0"},
-	{modules, ['hello_handler','leenwo_app','leenwo_sup','rest_handler']},
-	{registered, [leenwo_sup]},
-	{applications, [kernel,stdlib,cowboy]},
-	{mod, {leenwo_app, []}},
-	{env, []}
-]}.

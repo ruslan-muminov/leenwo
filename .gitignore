@@ -6,4 +6,6 @@ logs
 relx
 leenwo.d
 erl_crash.dump
+config
+relx.config
 ssl
