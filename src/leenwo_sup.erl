@@ -23,12 +23,12 @@ init(_Args) ->
 			type => worker,
 			modules => [timer_worker]
 		},
-		#{	id => user_sup,
-			start => {user_sup, start_link, []},
+		#{	id => user_super,
+			start => {user_super, start_link, []},
 			restart => permanent,
 			shutdown => 2000,
 			type => supervisor,
-			modules => [user_sup]
+			modules => [user_super]
 		}
 	],
 

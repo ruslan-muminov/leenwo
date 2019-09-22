@@ -18,12 +18,12 @@ loop(State) ->
 	receive
 		% message from Timer, 
 		% Data from table "daily"
-		{timer, Data} -> 
+		{timer, _Data} -> 
 			NewState = State,
 			loop(NewState);
 		% message from User,
 		% Data from request
-		{user, Data} ->
+		{user, _Data} ->
 			% user_proc:some_func
 			NewState = State,
 			loop(NewState);
