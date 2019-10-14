@@ -7,7 +7,7 @@
 start(_Type, _Args) ->
 	Dispatch = cowboy_router:compile([
 		{'_', [{"/hello", hello_handler, []},
-			{"/test/[...]", rest_handler, []}]}
+			{"/leenwo/[...]", rest_handler, []}]}
 	]),
 	%{ok, _} = cowboy:start_clear(my_http_listener, 
 	%	[{port, 8443}],
