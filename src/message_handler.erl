@@ -1,14 +1,35 @@
 -module(message_handler).
 -export([proc/1]).
 
-proc(Message) ->
-	json_body_to_map(Message),
-	ok.
+-record(message, {chat_id, message_id, date, first_name, username, update_id, text}).
 
-% Body: [{<<"{\"update_id\":702475916,\n\"message\":{\"message_id\":38,\"from\":{\"id\":70487131,\"is_bot\":false,\"first_name\":\"Ruslan\",\"username\":\"rusik_pusik_sidodgi_skrskr\",\"language_code\":\"ru\"},\"chat\":{\"id\":70487131,\"first_name\":\"Ruslan\",\"username\":\"rusik_pusik_sidodgi_skrskr\",\"type\":\"private\"},\"date\":1571775755,\"text\":\"Ahhaha\"}}">>,
-%         true}]
+proc(Message) ->
+	MapMessage = json_body_to_map(Message),
+	parse_map_message(MapMessage).
+
+
 json_body_to_map([{JsonBin, true}]) ->
 	jsone:decode(JsonBin);
 json_body_to_map(Body) ->
 	io:format("wrong body format: ~p~n", [Body]),
+	undefined.
+
+
+parse_map_message(#{<<"message">> := Message, <<"update_id">> := UpdateId}) ->
+	#{<<"id">>         := ChatId}   = maps:get(<<"chat">>, Message),
+	#{<<"date">>       := Date,
+	  <<"message_id">> := MessageId,
+	  <<"text">>       := Text}     = Message,
+	#{<<"first_name">> := FirstName, 
+	  <<"username">>   := Username} = maps:get(<<"from">>, Message),
+
+	#message{chat_id    = ChatId,
+	         message_id = MessageId,
+	         date       = Date,
+	         first_name = FirstName,
+	         username   = Username,
+	         update_id  = UpdateId,
+	         text       = Text};
+parse_map_message(Other) ->
+	io:format("wrong message format: ~p~n", [Other]),
 	undefined.
