@@ -26,5 +26,5 @@ to_json(Req, State) ->
 
 from_json(Req, State) -> 
 	{ok, Body, Req1} = cowboy_req:read_urlencoded_body(Req),
-	message_handler:proc(Body),
+	message_handler:proc(Body), % SPAWN!
 	{true, Req1, State}.

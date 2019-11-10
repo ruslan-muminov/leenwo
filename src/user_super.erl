@@ -2,9 +2,8 @@
 -behaviour(supervisor).
 
 -export([init/1, start_link/0]).
+-export([handle_user/2]).
 
-
-% {ok, Super} = user_super:start_link().
 start_link() ->
 	supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 
@@ -17,9 +16,14 @@ init(_Args) ->
 
 	ChildSpec =
 		[#{id => user_worker,
-			start => {user_worker, start_link, [1,2,3]},
+			start => {user_worker, start_link, []},
 			restart => permanent,
 			shutdown => 2000,
 			type => worker,
 			modules => [user_worker]}],
 	{ok, {SupervisorSpec, ChildSpec}}.
+
+
+handle_user(ChatId, Message) ->
+	% check ChatId, maybe exist
+	supervisor:start_child(?MODULE, [ChatId, Message]).
