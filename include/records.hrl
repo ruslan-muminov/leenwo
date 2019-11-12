@@ -9,3 +9,8 @@
                   username,
                   update_id,
                   text}).
+
+-record(user_schedule, {chat_id,
+                        time,
+                        word_id,
+                        task}).

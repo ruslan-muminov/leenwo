@@ -1,35 +1,33 @@
 -module(user_worker).
+-behaviour(gen_server).
 
--export([start_link/3,loop/1]).
-
-
-start_link(A, B, C) ->
-	io:format("A=~p B=~p C=~p~n", [A,B,C]),
-	init().
+-export([start_link/2,init/1,handle_cast/2,handle_call/3]).
+-export([get_user_worker_name/1]).
 
 
-init() ->
-	%spawn(user_worker, loop, [state]).
-	spawn(fun() -> loop([]) end).
+start_link(ChatId, Message) ->
+	Name = get_user_worker_name(?MODULE),
+	gen_server:start_link({local, Name}, ?MODULE, [ChatId, Message], []).
 
 
-% State: chat_id, status
-loop(State) ->
-	receive
-		% message from Timer, 
-		% Data from table "daily"
-		{timer, _Data} -> 
-			NewState = State,
-			loop(NewState);
-		% message from User,
-		% Data from request
-		{user, _Data} ->
-			% user_proc:some_func
-			NewState = State,
-			loop(NewState);
-		stop ->
-			ok;
-		Other ->
-			io:format("Unknown type of message:~n~p~n", [Other]),
-			loop(State)
-	end.
+init([_ChatId, Message]) ->
+	User = message_handler:message_to_user(Message),
+	db_lib:update_user(User),
+
+	% (2) create user_schedule, if absent
+	{ok, []}.
+
+
+handle_call(Request, _From, State) ->
+	{reply, Request, State}.
+
+
+handle_cast(_Request, State) ->
+	{noreply, State}.
+
+
+%%%--------------------------------------------------------------
+
+get_user_worker_name(ChatId) ->
+	ModuleName = atom_to_binary(?MODULE, utf8),
+	binary_to_atom(<<ModuleName/binary, "_", ChatId/binary>>, utf8).

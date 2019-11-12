@@ -1,5 +1,6 @@
 -module(message_handler).
 -export([proc/1]).
+-export([message_to_user/1]).
 
 -include("records.hrl").
 
@@ -41,10 +42,10 @@ get_chat_id_from_message(#message{chat_id = ChatId}) ->
 	ChatId.
 
 
-% message_to_user(#message{chat_id = ChatId, 
-% 						 first_name = FirstName,
-% 						 username = Username}) ->
-% 	#user{chat_id = ChatId, first_name = FirstName, username = Username}.
+message_to_user(#message{chat_id = ChatId, 
+						 first_name = FirstName,
+						 username = Username}) ->
+	#user{chat_id = ChatId, first_name = FirstName, username = Username}.
 
 
 handle_chat_id(ChatId, Message) ->
